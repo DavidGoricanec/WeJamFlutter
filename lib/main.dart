@@ -166,6 +166,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextFormField(
                     controller: _passwordController,
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
                     decoration: const InputDecoration(labelText: 'Password'),
                     validator: (String? value) {
                       if (value == '') {
