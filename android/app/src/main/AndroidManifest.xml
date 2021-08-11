@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.fhj.wejam">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="wejam"
         android:icon="@mipmap/ic_launcher">

@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './config.dart' as config;
 import './session.dart';
 import 'results.dart';
+import 'dart:async';
 
 abstract class ListItem {
   /// The title line to show in a list item.
@@ -23,6 +25,7 @@ class Person implements ListItem {
   final String instruments;
   final String base64_img;
   final String content_type;
+  final Uint8List bytes;
 
   Person(
       {required this.firstname,
@@ -32,9 +35,11 @@ class Person implements ListItem {
       required this.distance,
       required this.instruments,
       required this.base64_img,
-      required this.content_type});
+      required this.content_type,
+      required this.bytes});
 
   factory Person.fromJson(Map<String, dynamic> json) {
+
     return Person(
       firstname: json["firstname"],
       lastname: json["lastname"],
@@ -42,16 +47,21 @@ class Person implements ListItem {
       phonenumber: json["phonenumber"].toString(),
       distance: json["distance"].toString(),
       instruments: json["playing_instruments"].toString(),
-      base64_img: 'x',
-      //json["base64_img"],
+      base64_img: json["base64string"],
       content_type: json["content_type"].toString(),
+      bytes: Base64Decoder().convert(json["base64string"]),
     );
   }
 
   @override
-  Widget buildTitle(BuildContext context) => Text('$firstname $lastname');
+  Widget buildTitle(BuildContext context) => Text('');
 
   @override
   Widget buildSubtitle(BuildContext context) =>
-      Text('$distance km, $birthday, $instruments');
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        ListTile(
+          leading: new Image.memory(bytes),
+          title: new  Text('$firstname $lastname \n$distance km, $birthday, $instruments'),
+        ),
+      ]);
 }
